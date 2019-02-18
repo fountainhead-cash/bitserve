@@ -1,5 +1,4 @@
 require('dotenv').config()
-const config = require('./bitserve.json')
 const express = require('express')
 const bitqueryd = require('fountainhead-bitqueryd')
 const PQueue = require('p-queue')
@@ -7,8 +6,22 @@ const ip = require('ip')
 const app = express()
 const rateLimit = require("express-rate-limit")
 const cors = require("cors")
+
+const config = {
+  "query": {
+    "v": 3,
+    "q": { "find": {}, "limit": 10 }
+  },
+  "name": process.env.db_name ? process.env.db_name : "bitdb",
+  "url": process.env.db_url ? process.env.db_url : "mongodb://localhost:27017",
+  "port": Number.parseInt(process.env.bitserve_port ? process.env.bitserve_port : 3000),
+  "timeout": Number.parseInt(process.env.bitserve_timeout ? process.env.bitserve_timeout : 30000),
+  "log": process.env.bitserve_log ? process.env.bitserve_log == 'true' : true
+};
+
 const concurrency = ((config.concurrency && config.concurrency.aggregate) ? config.concurrency.aggregate : 3)
 const queue = new PQueue({concurrency: concurrency})
+
 var db
 
 app.set('view engine', 'ejs')
@@ -77,6 +90,17 @@ app.get('/explorer', function (req, res) {
 app.get('/', function(req, res) {
   res.redirect('/explorer')
 });
+app.get(/^\/explorer2\/(.+)/, function(req, res) {
+  let encoded = req.params[0]
+  let decoded = Buffer.from(encoded, 'base64').toString()
+  res.render('explorer2', { code: decoded })
+});
+app.get('/explorer2', function (req, res) {
+  res.render('explorer2', { code: JSON.stringify(config.query, null, 2) })
+});
+app.get('/', function(req, res) {
+  res.redirect('/explorer')
+});
 var run = async function() {
   db = await bitqueryd.init({
     url: (config.url ? config.url : process.env.url),
@@ -92,7 +116,7 @@ var run = async function() {
     console.log(`#  Explorer: ${ip.address()}:${config.port}/explorer`);
     console.log(`#  API Endpoint: ${ip.address()}:${config.port}/q`);
     console.log("#")
-    console.log("#  Learn more at https://docs.bitdb.network")
+    console.log("#  Learn more at https://docs.fountainhead.cash")
     console.log("#")
     console.log("######################################################################################");
   })
