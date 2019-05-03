@@ -57,6 +57,8 @@ npm start
 
 You can configure the service with .env, just copy .env.example to .env and edit it to match your system.
 
+To disable the ratelimit set `ratelimit_disabled=1`, and to increase or decrease the requests per minute allowed modify `ratelimit_requests`
+
 # Join the Community
 
 - Chat: Join fountainhead.cash Telegram channel, ask questions, share your projects, etc. [Open chat](http://t.me/fountainheadcash)

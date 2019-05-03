@@ -32,25 +32,30 @@ var whitelist = []
 if (process.env.whitelist) {
   whitelist = process.env.whitelist.split(',')
 }
+var ratelimit_disabled = false;
+if (process.env.ratelimit_disabled) {
+  ratelimit_disabled = process.env.ratelimit_disabled
+}
 app.use(cors())
 app.enable("trust proxy")
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute window
-  max: 60, // 60 requests per windowMs
+  max: Number.parseInt(process.env.ratelimit_requests ? process.env.ratelimit_requests : 300), // Requests per windowMs
   handler: function(req, res, /*next*/) {
     res.format({
       json: function() {
         res.status(500).json({
-          error: "Too many requests. Limits are 60 requests per minute."
+          error: "Too many requests. Limits are 300 requests per minute."
         })
       }
     })
   },
   skip: function (req, /*res*/) {
-    if (whitelist.includes(req.ip)) {
+    if (ratelimit_disabled == true || whitelist.includes(req.ip)) {
       return true
+    } else {
+      return false
     }
-    return false
   }
 })
 app.get(/^\/q\/(.+)/, cors(), limiter, async function(req, res) {
