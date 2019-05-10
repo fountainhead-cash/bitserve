@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express')
-const bitqueryd = require('fountainhead-bitqueryd')
+const bitqueryd = require('fountainhead-core').bitqueryd
 const PQueue = require('p-queue')
 const ip = require('ip')
 const app = express()
