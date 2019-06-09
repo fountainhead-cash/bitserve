@@ -221,7 +221,7 @@ main {
     <header>
       <a href='/' class='brand'>BitDB Fountainhead</a>
       <div class='flexible'></div>
-      <a target='_blank' href='/explorer' class='item'><i class='fas fa-screwdriver'></i> View Tabular</a>
+      <a id='switchEx' href='/explorer' class='item'><i class='fas fa-screwdriver'></i> View Tabular</a>
       <a target='_blank' href='https://docs.fountainhead.cash' class='item'><i class='fas fa-book'></i> Documentation</a>
     </header>
     <div class='jumbotron align-center header'>
@@ -330,6 +330,8 @@ var run = function() {
 var updateUrl = function(query) {
   var base64 = btoa(query)
   var u = document.querySelector(".url");
+  var ex2 = document.querySelector("#switchEx");
+  ex2.href = "/explorer/" + base64;
   u.value = endpoint + base64;
   u.classList.add("updated");
   setTimeout(function() {
