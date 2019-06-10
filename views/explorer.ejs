@@ -282,8 +282,12 @@ var run = function() {
 var updateUrl = function(query) {
   var base64 = btoa(query)
   var u = document.querySelector(".url");
-  var ex2 = document.querySelector("#switchEx");
-  ex2.href = "/explorer2/" + base64;
+  var switchEx = document.querySelector("#switchEx"); // switch explorer
+  <% if(sockserve == true) { %>
+  var switchSck = document.querySelector("#switchSck"); // switch to bitsocket
+  switchSck.href = "/channel/" + base64;
+  <% }; %>
+  switchEx.href = "/explorer2/" + base64;
   u.value = endpoint + base64;
   u.classList.add("updated");
   setTimeout(function() {
@@ -378,6 +382,9 @@ var render = function(selector, items) {
     <header>
       <a href='/' class='brand'>BitDB Fountainhead</a>
       <div class='flexible'></div>
+      <% if(sockserve == true) { %>
+      <a id='switchSck' href='/channel' class='item'></i> Switch to Bitsocket</a>
+      <% }; %>
       <a id='switchEx' href='/explorer2' class='item'><i class='fas fa-wrench'></i> View Raw</a>
       <a target='_blank' href='https://docs.fountainhead.cash' class='item'><i class='fas fa-book'></i> Documentation</a>
     </header>

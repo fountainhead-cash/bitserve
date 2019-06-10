@@ -87,10 +87,10 @@ app.get(/^\/q\/(.+)/, cors(), limiter, async function(req, res) {
 app.get(/^\/explorer\/(.+)/, function(req, res) {
   let encoded = req.params[0]
   let decoded = Buffer.from(encoded, 'base64').toString()
-  res.render('explorer', { code: decoded })
+  res.render('explorer', { code: decoded, sockserve: process.env.same_domain_sockserve })
 });
 app.get('/explorer', function (req, res) {
-  res.render('explorer', { code: JSON.stringify(config.query, null, 2) })
+  res.render('explorer', { code: JSON.stringify(config.query, null, 2), sockserve: process.env.same_domain_sockserve })
 });
 app.get('/', function(req, res) {
   res.redirect('/explorer')
@@ -98,10 +98,10 @@ app.get('/', function(req, res) {
 app.get(/^\/explorer2\/(.+)/, function(req, res) {
   let encoded = req.params[0]
   let decoded = Buffer.from(encoded, 'base64').toString()
-  res.render('explorer2', { code: decoded })
+  res.render('explorer2', { code: decoded, sockserve: process.env.same_domain_sockserve })
 });
 app.get('/explorer2', function (req, res) {
-  res.render('explorer2', { code: JSON.stringify(config.query, null, 2) })
+  res.render('explorer2', { code: JSON.stringify(config.query, null, 2), sockserve: process.env.same_domain_sockserve })
 });
 app.get('/', function(req, res) {
   res.redirect('/explorer')
