@@ -12,19 +12,6 @@ This project contains:
 1. BitDB Microservice API Endpoint: An HTTP API Endpoint to your BitDB
 2. BitDB Query Web UI: As seen in [https://bitdb.fountainhead.cash/explorer](https://bitdb.fountainhead.cash/explorer)
 
-## 1. BitDB Microservice API Endpoint
-
-Make HTTP requests to your bitdb node
-
-![api](public/api.png)
-
-## 2. BitDB Query Web UI
-
-Makes use of the API endpoint to render the query UI
-
-![query](public/bitserve.png)
-
-
 # Prerequisites
 
 You must have the following installed.
@@ -35,30 +22,44 @@ You must have the following installed.
 
 # Install
 
-Step 1. Clone this repository
-
+**Clone the Bitserve repository:**
 ```
-git clone https://github.com/fountainhead-cash/bitserve.git
+git clone https://github.com/fountainhead-cash/bitserve.git && cd bitserve
 ```
 
-Step 2. Install Dependencies
-
+**Install dependencies:**
 ```
 npm install
 ```
 
-Step 3. Run
-
-```
-npm start
-```
-
-# Configure
+**Configure Bitserve:**
 
 You can configure the service with .env, just copy .env.example to .env and edit it to match your system.
 
-To disable the ratelimit set `ratelimit_disabled=1`, and to increase or decrease the requests per minute allowed modify `ratelimit_requests`
+```
+cp .env.example .env
+```
 
-# Join the Community
+To enable/disable rate-limiting change `ratelimit_disabled` to either 1 for off or 0 for on. `ratelimit_requests` is enforced in a 60-second window. `same_domain_sockserve` should be set to 1 only if your webserver set to serve sockserve's /channel page and /s/ API endpoint on the same domain as bitserve.
+
+```
+vim .env
+```
+
+### Running as a daemon
+
+**Install PM2 using NPM**
+```
+npm install pm2 -g
+```
+
+**Start bitserve**
+```
+pm2 start index.js --name="Bitserve"
+```
+
+
+
+## Join the Community
 
 - Chat: Join fountainhead.cash Telegram channel, ask questions, share your projects, etc. [Open chat](http://t.me/fountainheadcash)
